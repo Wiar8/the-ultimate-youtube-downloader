@@ -27,6 +27,7 @@ node_modules/
 Thumbs.db
 
 # Downloads
+.Downloads/
 *.mp4
 *.webm
 *.mp3
