@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.env
+.venv
+venv/
+*.egg-info/
+dist/
+build/
+
+# Node
+node_modules/
+.npm
+
+# Astro
+.astro/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Downloads
+*.mp4
+*.webm
+*.mp3
+*.m4a
