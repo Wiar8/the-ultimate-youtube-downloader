@@ -1,10 +1,8 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Downloader from '../components/Downloader';
+import Layout from "../layouts/Layout.astro";
+import Downloader from "../components/Downloader";
 ---
 
 <Layout title="YouTube Downloader">
-  <main>
-    <Downloader client:load />
-  </main>
+  <Downloader client:load />
 </Layout>
