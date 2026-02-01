@@ -1,5 +1,6 @@
 ---
-import '../styles/global.css'
+import "../styles/global.css";
+import Sidebar from "../components/Sidebar";
 
 interface Props {
   title: string;
@@ -14,10 +15,20 @@ const { title } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
     <title>{title}</title>
   </head>
-  <body class="min-h-screen bg-background">
-    <main class="container mx-auto max-w-2xl py-10 px-4">
+  <body
+    class="w-full min-h-screen bg-[url('/assets/images/bg.webp')] bg-cover bg-no-repeat bg-top"
+  >
+    <div class="fixed inset-0 bg-black/30 pointer-events-none"></div>
+    <Sidebar client:load />
+    <main class="ml-16 relative">
       <slot />
     </main>
   </body>
