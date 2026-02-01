@@ -1,10 +1,8 @@
 const API_BASE = import.meta.env.PUBLIC_API_URL;
 
-export interface VideoFormat {
-  format_id: string;
-  ext: string;
-  resolution: string;
-  filesize: number | null;
+export interface QualityOption {
+  height: number;
+  label: string;
 }
 
 export interface VideoInfo {
@@ -12,13 +10,13 @@ export interface VideoInfo {
   title: string;
   thumbnail: string;
   duration: number;
-  formats: VideoFormat[];
+  qualities: QualityOption[];
 }
 
 export interface DownloadResult {
-  url: string;
+  filename: string;
   title: string;
-  ext: string;
+  download_url: string;
 }
 
 export async function getVideoInfo(url: string): Promise<VideoInfo> {
@@ -31,17 +29,30 @@ export async function getVideoInfo(url: string): Promise<VideoInfo> {
   return response.json();
 }
 
-export async function getDownloadUrl(
-  url: string,
-  formatId: string,
-): Promise<DownloadResult> {
-  const response = await fetch(`${API_BASE}/download`, {
+export async function downloadAudio(url: string): Promise<DownloadResult> {
+  const response = await fetch(`${API_BASE}/download/audio`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ url, format_id: formatId }),
+    body: JSON.stringify({ url }),
   });
   if (!response.ok) {
-    throw new Error("Failed to get download URL");
+    throw new Error("Failed to download audio");
   }
   return response.json();
+}
+
+export async function downloadVideo(url: string, height: number): Promise<DownloadResult> {
+  const response = await fetch(`${API_BASE}/download/video`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url, height }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to download video");
+  }
+  return response.json();
+}
+
+export function getFileUrl(path: string): string {
+  return `${API_BASE}${path}`;
 }
