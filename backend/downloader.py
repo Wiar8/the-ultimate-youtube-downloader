@@ -1,11 +1,6 @@
 """yt-dlp wrapper functions for video downloading."""
 
-import os
 import yt_dlp
-from pathlib import Path
-
-DOWNLOADS_DIR = Path(__file__).parent / "downloads"
-DOWNLOADS_DIR.mkdir(exist_ok=True)
 
 
 def get_video_info(url: str) -> dict:
@@ -20,7 +15,7 @@ def get_video_info(url: str) -> dict:
 
     formats = []
     for f in info.get("formats", []):
-        # Only include formats with both video and audio, or audio-only
+        # Only include formats with video+audio or audio-only
         if f.get("vcodec") != "none" or f.get("acodec") != "none":
             format_info = {
                 "format_id": f.get("format_id"),
@@ -39,18 +34,19 @@ def get_video_info(url: str) -> dict:
     }
 
 
-def download_video(url: str, format_id: str, task_id: str) -> str:
-    """Download video and return the filename."""
-    output_template = str(DOWNLOADS_DIR / f"{task_id}.%(ext)s")
-
+def get_download_url(url: str, format_id: str) -> dict:
+    """Get direct download URL for a specific format."""
     ydl_opts = {
-        "format": format_id,
-        "outtmpl": output_template,
         "quiet": True,
         "no_warnings": True,
+        "format": format_id,
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=True)
-        ext = info.get("ext")
-        return f"{task_id}.{ext}"
+        info = ydl.extract_info(url, download=False)
+
+    return {
+        "url": info.get("url"),
+        "title": info.get("title"),
+        "ext": info.get("ext"),
+    }
