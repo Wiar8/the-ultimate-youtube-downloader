@@ -3,12 +3,21 @@
 import uuid
 from pathlib import Path
 from fastapi import FastAPI, BackgroundTasks, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 from downloader import get_video_info, download_video, DOWNLOADS_DIR
 
 app = FastAPI(title="YouTube Downloader API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # In-memory storage for download tasks
 download_tasks: dict[str, dict] = {}
