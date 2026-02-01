@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Sidebar from "../components/Sidebar";
+import Footer from "../components/Footer";
 
 interface Props {
   title: string;
@@ -24,12 +25,13 @@ const { title } = Astro.props;
     <title>{title}</title>
   </head>
   <body
-    class="w-full min-h-screen bg-[url('/assets/images/bg.webp')] bg-cover bg-no-repeat bg-top"
+    class="w-full min-h-screen bg-[url('/assets/images/bg.webp')] bg-cover bg-no-repeat bg-bottom"
   >
-    <div class="fixed inset-0 bg-black/30 pointer-events-none"></div>
+    <div class="fixed inset-0 bg-black/20 pointer-events-none"></div>
     <Sidebar client:load />
     <main class="ml-16 relative">
       <slot />
     </main>
+    <Footer client:load />
   </body>
 </html>
