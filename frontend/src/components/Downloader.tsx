@@ -16,7 +16,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getVideoInfo, downloadAudio, downloadVideo, getFileUrl } from "@/lib/api";
+import {
+  getVideoInfo,
+  downloadAudio,
+  downloadVideo,
+  getFileUrl,
+} from "@/lib/api";
 import type { VideoInfo } from "@/lib/api";
 
 function formatDuration(seconds: number): string {
@@ -94,10 +99,10 @@ export default function Downloader() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-8">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 md:px-8">
       {/* Hero Text */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-serif leading-tight text-white">
+      <div className="text-center mb-8 md:mb-12">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif leading-tight text-white">
           No spam, no ads, no viruses,
           <br />
           just&nbsp;
@@ -106,18 +111,18 @@ export default function Downloader() {
       </div>
 
       {/* Input + Button */}
-      <div className="w-full max-w-2xl flex gap-3">
+      <div className="w-full max-w-2xl flex flex-col sm:flex-row gap-3">
         <Input
           type="text"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="Paste your YouTube URL here..."
-          className="flex-1 h-12 text-base bg-white"
+          className=" h-14 sm:h-12 text-base bg-white"
           onKeyDown={(e) => e.key === "Enter" && handleFetchInfo()}
         />
         <Button
           size="lg"
-          className="h-12 px-6 bg-foreground"
+          className="h-14 sm:h-12 px-6 bg-foreground w-full sm:w-auto"
           onClick={handleFetchInfo}
           disabled={loading}
         >
@@ -139,7 +144,9 @@ export default function Downloader() {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle className="line-clamp-2">{videoInfo?.title}</DialogTitle>
+            <DialogTitle className="line-clamp-2">
+              {videoInfo?.title}
+            </DialogTitle>
             <DialogDescription>
               Duration: {videoInfo && formatDuration(videoInfo.duration)}
             </DialogDescription>
@@ -176,7 +183,10 @@ export default function Downloader() {
               {/* Video Tab */}
               {activeTab === "video" && (
                 <div className="space-y-4">
-                  <Select value={selectedQuality} onValueChange={setSelectedQuality}>
+                  <Select
+                    value={selectedQuality}
+                    onValueChange={setSelectedQuality}
+                  >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select quality..." />
                     </SelectTrigger>
