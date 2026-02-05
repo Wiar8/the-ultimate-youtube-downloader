@@ -1,0 +1,21 @@
+services:
+  backend:
+    # build:
+    #   context: ./backend
+    #   dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/tuyd-backend:latest
+    container_name: tuyd-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist downloads directory (optional)
+      - ./backend/downloads:/app/downloads
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

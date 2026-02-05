@@ -1,41 +1,33 @@
 # The Ultimate YouTube Downloader
 
-A web platform to download YouTube videos in any format and quality. No ads, no spam.
+A web platform to download YouTube videos and audio. No ads, no spam, no viruses.
 
 ## Stack
 
-- **Backend:** FastAPI + yt-dlp
-- **Frontend:** Astro
-- **Runtime:** Python 3.14
-
-## Structure
-
-```
-├── backend/    # REST API (FastAPI)
-├── frontend/   # Web UI (Astro)
-```
-
-Monorepo with backend and frontend separated into independent folders.
+- **Backend:** FastAPI + yt-dlp + FFmpeg
+- **Frontend:** Astro + React + Tailwind CSS
 
 ## Setup
 
 ### Backend
 
-1. Create the conda environment:
-
-```bash
-conda env create -f environment.yml
-```
-
-2. Activate the environment:
-
-```bash
-conda activate tuyd
-```
-
-3. Run the development server:
-
 ```bash
 cd backend
+conda env create -f environment.yml
+conda activate tuyd
 fastapi dev main.py
+```
+
+### Frontend
+
+```bash
+cd frontend
+bun install
+bun dev
+```
+
+### Docker
+To run with Docker:
+```bash
+docker compose up -d
 ```
