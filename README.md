@@ -4,7 +4,7 @@ A web platform to download YouTube videos and audio. No ads, no spam, no viruses
 
 ## Stack
 
-- **Backend:** FastAPI + yt-dlp + FFmpeg
+- **Backend:** FastAPI +  yt-dlp + FFmpeg
 - **Frontend:** Astro + React + Tailwind CSS
 
 ## Setup
@@ -27,7 +27,7 @@ bun dev
 ```
 
 ### Docker
-To run with Docker:
+To run with Docker: 
 ```bash
 docker compose up -d
 ```
