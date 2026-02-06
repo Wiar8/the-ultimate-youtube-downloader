@@ -9,8 +9,10 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Persist downloads directory (optional)
+      # Persist downloads directory
       - ./backend/downloads:/app/downloads
+      # Persistent cookies for YouTube authentication
+      - ./backend/cookies.txt:/app/cookies.txt
     environment:
       - PYTHONUNBUFFERED=1
     healthcheck:

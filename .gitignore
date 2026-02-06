@@ -39,3 +39,7 @@ Thumbs.db
 *.webm
 *.mp3
 *.m4a
+
+# YouTube Auth
+backend/cookies.txt
+cookies.txt

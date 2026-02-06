@@ -8,6 +8,15 @@ import yt_dlp
 DOWNLOADS_DIR = Path(__file__).parent / "downloads"
 DOWNLOADS_DIR.mkdir(exist_ok=True)
 
+COOKIES_FILE = Path(__file__).parent / "cookies.txt"
+
+
+def get_ydl_opts(base_opts: dict) -> dict:
+    """Add cookies to opts if cookies.txt exists."""
+    if COOKIES_FILE.exists():
+        base_opts["cookiefile"] = str(COOKIES_FILE)
+    return base_opts
+
 
 def sanitize_filename(title: str) -> str:
     """Sanitize title for use as filename."""
@@ -24,10 +33,10 @@ def sanitize_filename(title: str) -> str:
 
 def get_video_info(url: str) -> dict:
     """Fetch video metadata and available qualities."""
-    ydl_opts = {
+    ydl_opts = get_ydl_opts({
         "quiet": True,
         "no_warnings": True,
-    }
+    })
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
@@ -60,7 +69,7 @@ def get_video_info(url: str) -> dict:
 def download_audio(url: str) -> dict:
     """Download best audio quality as MP3."""
     # First get info to get the title
-    with yt_dlp.YoutubeDL({"quiet": True}) as ydl:
+    with yt_dlp.YoutubeDL(get_ydl_opts({"quiet": True})) as ydl:
         info = ydl.extract_info(url, download=False)
 
     title = info.get("title", "audio")
@@ -76,7 +85,7 @@ def download_audio(url: str) -> dict:
             "preferredcodec": "mp3",
             "preferredquality": "320",
         }],
-    }
+    })
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.extract_info(url, download=True)
@@ -90,7 +99,7 @@ def download_audio(url: str) -> dict:
 def download_video(url: str, height: int) -> dict:
     """Download video with audio merged as MP4 (H.264 + AAC for Mac compatibility)."""
     # First get info to get the title
-    with yt_dlp.YoutubeDL({"quiet": True, "no_warnings": True}) as ydl:
+    with yt_dlp.YoutubeDL(get_ydl_opts({"quiet": True, "no_warnings": True})) as ydl:
         info = ydl.extract_info(url, download=False)
 
     title = info.get("title", "video")
@@ -103,29 +112,8 @@ def download_video(url: str, height: int) -> dict:
         f"bestvideo[height<={height}]+bestaudio/best"
     )
 
-    ydl_opts = {
-        "quiet": True,
-        "no_warnings": True,
-        "format": format_str,
-        "outtmpl": str(DOWNLOADS_DIR / f"{filename}.%(ext)s"),
-        "merge_output_format": "mp4",
-        # Re-encode to H.264 + AAC for universal compatibility
-        "postprocessors": [{
-            "key": "FFmpegVideoConvertor",
-            "preferedformat": "mp4",
-        }],
-        "postprocessor_args": [
-            "-c:v", "libx264",
-            "-preset", "fast",
-            "-crf", "23",
-            "-c:a", "aac",
-            "-b:a", "192k",
-            "-movflags", "+faststart",
-        ],
-        # Retry on errors
-        "retries": 3,
         "ignoreerrors": False,
-    }
+    })
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.extract_info(url, download=True)
