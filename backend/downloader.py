@@ -66,6 +66,7 @@ def get_video_info(url: str) -> dict:
         "qualities": quality_options,
     }
 
+    
 
 def download_audio(url: str) -> dict:
     """Download best audio quality as MP3."""
