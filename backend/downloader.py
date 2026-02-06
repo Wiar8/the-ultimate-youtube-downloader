@@ -86,9 +86,9 @@ def download_audio(url: str) -> dict:
             "preferredcodec": "mp3",
             "preferredquality": "320",
         }],
-    })
+    }
 
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+    with yt_dlp.YoutubeDL(get_ydl_opts(ydl_opts)) as ydl:
         ydl.extract_info(url, download=True)
 
     return {
@@ -112,11 +112,31 @@ def download_video(url: str, height: int) -> dict:
         f"best[height<={height}][ext=mp4]/"
         f"bestvideo[height<={height}]+bestaudio/best"
     )
-
+    ydl_opts = {
+        "quiet": True,
+        "no_warnings": True,
+        "format": format_str,
+        "outtmpl": str(DOWNLOADS_DIR / f"{filename}.%(ext)s"),
+        "merge_output_format": "mp4",
+        # Re-encode to H.264 + AAC for universal compatibility
+        "postprocessors": [{
+            "key": "FFmpegVideoConvertor",
+            "preferedformat": "mp4",
+        }],
+        "postprocessor_args": [
+            "-c:v", "libx264",
+            "-preset", "fast",
+            "-crf", "23",
+            "-c:a", "aac",
+            "-b:a", "192k",
+            "-movflags", "+faststart",
+        ],
+        # Retry on errors
+        "retries": 3,
         "ignoreerrors": False,
-    })
+    }
 
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+    with yt_dlp.YoutubeDL(get_ydl_opts(ydl_opts)) as ydl:
         ydl.extract_info(url, download=True)
 
     return {
