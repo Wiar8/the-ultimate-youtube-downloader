@@ -18,6 +18,7 @@ def get_ydl_opts(base_opts: dict) -> dict:
     return base_opts
 
 
+
 def sanitize_filename(title: str) -> str:
     """Sanitize title for use as filename."""
     # Remove invalid characters
